@@ -1,0 +1,6 @@
+enum State {
+  IDLE,
+  HOUR_SETTING,
+  MINUTE_SETTING,
+  SECOND_SETTING
+}
