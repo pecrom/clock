@@ -10,7 +10,6 @@
 #define DS3231_I2C_ADDRESS 0x68
 RTC::RTC(State &pState) {
 	state = &pState;
-	Serial.begin(9600);
 	Wire.begin();
 }
 

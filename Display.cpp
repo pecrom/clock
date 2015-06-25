@@ -26,17 +26,30 @@ void Display::initLcd() {
 
 void Display::update() {
 	lcd->clear();
-	switch(*state) {
+	switch (*state) {
 	case IDLE:
-			lcd->print(rtc->getHour(), DEC);
-			lcd->print(":");
-			lcd->print(rtc->getMinute(), DEC);
-			lcd->print(":");
-			lcd->print(rtc->getSecond(), DEC);
+		printTime();
 		break;
 	case HOUR_SETTING:
-			lcd->print("HOUR_SETTING");
+		lcd->print("HOUR_SETTING");
 	}
+}
+
+void Display::printTime() {
+	if (rtc->getHour() < 10) {
+		lcd->print("0");
+	}
+	lcd->print(rtc->getHour(), DEC);
+	lcd->print(":");
+	if (rtc->getMinute() < 10) {
+		lcd->print("0");
+	}
+	lcd->print(rtc->getMinute(), DEC);
+	lcd->print(":");
+	if (rtc->getSecond() < 10) {
+		lcd->print("0");
+	}
+	lcd->print(rtc->getSecond(), DEC);
 }
 
 Display::~Display() {

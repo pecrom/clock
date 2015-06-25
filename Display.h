@@ -18,10 +18,11 @@ public:
 	virtual ~Display();
 	void update();
 private:
-	void initLcd();
 	State *state;
 	LiquidCrystal *lcd;
 	RTC *rtc;
+	void initLcd();
+	void printTime();
 };
 
 #endif /* DISPLAY_H_ */
