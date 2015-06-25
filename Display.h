@@ -10,15 +10,18 @@
 
 #include "state.h"
 #include "display/LiquidCrystal.h"
+#include "RTC.h"
 
 class Display {
 public:
-	Display(State &pState);
+	Display(State &pState, RTC &pRtc);
 	virtual ~Display();
 	void update();
 private:
 	void initLcd();
-
+	State *state;
+	LiquidCrystal *lcd;
+	RTC *rtc;
 };
 
 #endif /* DISPLAY_H_ */

@@ -1,15 +1,25 @@
 // Do not remove the include below
 #include "clock.h"
+#include "display/LiquidCrystal.h"
+#include "Display.h"
+#include "RTC.h"
 
+//global variables
+State state;
+Display *display;
+RTC *rtc;
 
-//The setup function is called once at startup of the sketch
-void setup()
-{
-// Add your initialization code here
+//initialization
+void setup(){
+	state = IDLE;
+	rtc = new RTC(state);
+	display = new Display(state, *rtc);
 }
 
-// The loop function is called in an endless loop
+//main loop
 void loop()
 {
-//Add your repeated code here
+	rtc->update();
+	display->update();
+	delay(100);
 }

@@ -8,17 +8,15 @@
 #include "Display.h"
 #include "state.h"
 #include "display/LiquidCrystal.h"
+#include "RTC.h"
 
 const int ROWS = 2;
 const int COLS = 16;
 
-State *state;
-LiquidCrystal *lcd;
-
-Display::Display(State &pState) {
+Display::Display(State &pState, RTC &pRtc) {
 	state = &pState;
+	rtc = &pRtc;
 	initLcd();
-	lcd->print("test12");
 }
 
 void Display::initLcd() {
@@ -30,7 +28,11 @@ void Display::update() {
 	lcd->clear();
 	switch(*state) {
 	case IDLE:
-			lcd->print("IDLE");
+			lcd->print(rtc->getHour(), DEC);
+			lcd->print(":");
+			lcd->print(rtc->getMinute(), DEC);
+			lcd->print(":");
+			lcd->print(rtc->getSecond(), DEC);
 		break;
 	case HOUR_SETTING:
 			lcd->print("HOUR_SETTING");
