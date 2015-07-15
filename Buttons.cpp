@@ -131,11 +131,15 @@ void Buttons::findNextState(boolean pSettingsButton, boolean pBackButton,
 			*state = IDLE;
 		}
 		if (pSettingsButton == true) {
-
+			rtc->setDS3231time();
+			*state = IDLE;
 		}
 		if (pUpButton == true) {
-			Serial.println("MINUTE");
-
+			if (rtc->getMinute() < 59) {
+				rtc->setMinute(rtc->getMinute() + 1);
+			} else {
+				rtc->setMinute(0);
+			}
 		}
 		if (pRightButton == true) {
 			*state = SECOND_SETTING;
@@ -147,11 +151,15 @@ void Buttons::findNextState(boolean pSettingsButton, boolean pBackButton,
 			*state = IDLE;
 		}
 		if (pSettingsButton == true) {
-
+			rtc->setDS3231time();
+			*state = IDLE;
 		}
 		if (pUpButton == true) {
-			Serial.println("SECOND");
-
+			if (rtc->getSecond() < 59) {
+				rtc->setSecond(rtc->getSecond() + 1);
+			} else {
+				rtc->setSecond(0);
+			}
 		}
 		if (pRightButton == true) {
 			*state = HOUR_SETTING;
