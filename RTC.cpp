@@ -8,6 +8,7 @@
 #include "RTC.h"
 
 #define DS3231_I2C_ADDRESS 0x68
+
 RTC::RTC(State &pState) {
 	state = &pState;
 	Wire.begin();
@@ -27,6 +28,21 @@ void RTC::readDS3231time()
   dayOfMonth = bcdToDec(Wire.read());
   month = bcdToDec(Wire.read());
   year = bcdToDec(Wire.read());
+}
+
+void RTC::setDS3231time()
+{
+  // sets time and date data to DS3231
+  Wire.beginTransmission(DS3231_I2C_ADDRESS);
+  Wire.write(0); // set next input to start at the seconds register
+  Wire.write(decToBcd(second)); // set seconds
+  Wire.write(decToBcd(minute)); // set minutes
+  Wire.write(decToBcd(hour)); // set hours
+  Wire.write(decToBcd(dayOfWeek)); // set day of week (1=Sunday, 7=Saturday)
+  Wire.write(decToBcd(dayOfMonth)); // set date (1 to 31)
+  Wire.write(decToBcd(month)); // set month
+  Wire.write(decToBcd(year)); // set year (0 to 99)
+  Wire.endTransmission();
 }
 
 void RTC::update() {
@@ -65,3 +81,7 @@ byte RTC::bcdToDec(byte val)
   return( (val/16*10) + (val%16) );
 }
 
+byte RTC::decToBcd(byte val)
+{
+  return( (val/10*16) + (val%10) );
+}

@@ -11,15 +11,17 @@
 #include "button/Bounce.h"
 #include "state.h"
 #include "Arduino.h"
+#include "RTC.h"
 
 class Buttons {
 public:
-	Buttons(State &);
+	Buttons(State &, RTC &);
 	void update(void);
 	virtual ~Buttons();
 private:
 	Bounce *settingsButton, *backButton, *upButton, *rightButton;
 	State *state;
+	RTC *rtc;
 	void findNextState(boolean, boolean, boolean, boolean);
 };
 

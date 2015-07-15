@@ -24,11 +24,13 @@ public:
 	void setSecond(int);
 	void setMinute(int);
 	void setHour(int);
+	void setDS3231time(void);
 
 private:
 	State *state;
 	byte second, minute, hour, dayOfWeek, dayOfMonth, month, year;
 	byte bcdToDec(byte);
+	byte decToBcd(byte);
 	void readDS3231time(void);
 };
 

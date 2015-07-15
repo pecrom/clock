@@ -14,8 +14,8 @@ Buttons *buttons;
 //initialization
 void setup(){
 	state = IDLE;
-	buttons = new Buttons(state);
 	rtc = new RTC(state);
+	buttons = new Buttons(state, *rtc);
 	display = new Display(state, *rtc);
 }
 

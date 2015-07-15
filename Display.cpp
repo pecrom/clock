@@ -31,7 +31,18 @@ void Display::update() {
 		printTime();
 		break;
 	case HOUR_SETTING:
-		lcd->print("HOUR_SETTING");
+		lcd->print("Hour: ");
+		lcd->print(rtc->getHour());
+		break;
+	case MINUTE_SETTING:
+		lcd->print("Minute: ");
+		lcd->print(rtc->getMinute());
+		break;
+	case SECOND_SETTING:
+		lcd->print("Second: ");
+		lcd->print(rtc->getSecond());
+		break;
+
 	}
 }
 

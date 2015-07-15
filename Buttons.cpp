@@ -7,6 +7,7 @@
 
 #include "Buttons.h"
 #include "Arduino.h"
+#include "RTC.h"
 
 const int BUT_SETTINGS = 7;
 const int BUT_BACK = 6;
@@ -18,8 +19,9 @@ int settingsButtonOld = LOW;
 int upButtonOld = LOW;
 int rightButtonOld = LOW;
 
-Buttons::Buttons(State &pState) {
+Buttons::Buttons(State &pState, RTC &pRtc) {
 	state = &pState;
+	rtc = &pRtc;
 	pinMode(BUT_SETTINGS, INPUT);
 	pinMode(BUT_BACK, INPUT);
 	pinMode(BUT_UP, INPUT);
@@ -34,9 +36,9 @@ Buttons::Buttons(State &pState) {
 
 void Buttons::update() {
 	settingsButton->update();
-	  backButton->update();
-	  upButton->update();
-	  rightButton->update();
+	backButton->update();
+	upButton->update();
+	rightButton->update();
 
 	boolean settingsPressed = false;
 	boolean backPressed = false;
@@ -100,28 +102,33 @@ void Buttons::findNextState(boolean pSettingsButton, boolean pBackButton,
 	case IDLE:
 		if (pSettingsButton == true) {
 			Serial.println("IDLE -> MENU");
-
+			*state = HOUR_SETTING;
 		}
 		break;
 	case HOUR_SETTING:
 		if (pBackButton == true) {
 			Serial.println("MENU -> IDLE");
-
+			*state = IDLE;
 		}
 		if (pSettingsButton == true) {
-			//setDS3231time(second, minute, hour, dayOfWeek, dayOfMonth, month, year);
-
+			rtc->setDS3231time();
+			*state = IDLE;
 		}
 		if (pUpButton == true) {
+			if (rtc->getHour() < 23) {
+				rtc->setHour(rtc->getHour() + 1);
+			} else {
+				rtc->setHour(0);
+			}
 
 		}
 		if (pRightButton == true) {
-
+			*state = MINUTE_SETTING;
 		}
 		break;
 	case MINUTE_SETTING:
 		if (pBackButton == true) {
-
+			*state = IDLE;
 		}
 		if (pSettingsButton == true) {
 
@@ -131,13 +138,13 @@ void Buttons::findNextState(boolean pSettingsButton, boolean pBackButton,
 
 		}
 		if (pRightButton == true) {
-
+			*state = SECOND_SETTING;
 		}
 		break;
 
 	case SECOND_SETTING:
 		if (pBackButton == true) {
-
+			*state = IDLE;
 		}
 		if (pSettingsButton == true) {
 
@@ -147,7 +154,7 @@ void Buttons::findNextState(boolean pSettingsButton, boolean pBackButton,
 
 		}
 		if (pRightButton == true) {
-
+			*state = HOUR_SETTING;
 		}
 		break;
 	}
