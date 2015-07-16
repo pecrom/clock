@@ -8,21 +8,26 @@
 #ifndef BUTTONS_H_
 #define BUTTONS_H_
 
-#include "button/Bounce.h"
+
 #include "state.h"
 #include "Arduino.h"
 #include "RTC.h"
+#include "button/Button.h"
 
 class Buttons {
+
 public:
-	Buttons(State &, RTC &);
-	void update(void);
-	virtual ~Buttons();
+	Buttons(int, int, int, int); //Buttons(settings, back, up, right) - these parameters means to which pins the buttons are connected
+	bool settingsPressed(void);
+	bool backPressed(void);
+	bool upPressed(void);
+	bool rightPressed(void);
+
 private:
-	Bounce *settingsButton, *backButton, *upButton, *rightButton;
-	State *state;
-	RTC *rtc;
-	void findNextState(boolean, boolean, boolean, boolean);
+	Button *m_butSettings;
+	Button *m_butBack;
+	Button *m_butUp;
+	Button *m_butRight;
 };
 
 #endif /* BUTTONS_H_ */

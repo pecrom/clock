@@ -15,14 +15,13 @@ Buttons *buttons;
 void setup(){
 	state = IDLE;
 	rtc = new RTC(state);
-	buttons = new Buttons(state, *rtc);
+	buttons = new Buttons();
 	display = new Display(state, *rtc);
 }
 
 //main loop
 void loop()
 {
-	buttons->update();
 	rtc->update();
 	display->update();
 	delay(100);

@@ -14,161 +14,25 @@ const int BUT_BACK = 6;
 const int BUT_UP = 4;
 const int BUT_RIGHT = 5;
 
-int backButtonOld = LOW;
-int settingsButtonOld = LOW;
-int upButtonOld = LOW;
-int rightButtonOld = LOW;
-
-Buttons::Buttons(State &pState, RTC &pRtc) {
-	state = &pState;
-	rtc = &pRtc;
-	pinMode(BUT_SETTINGS, INPUT);
-	pinMode(BUT_BACK, INPUT);
-	pinMode(BUT_UP, INPUT);
-	pinMode(BUT_RIGHT, INPUT);
-	settingsButton = new Bounce(BUT_SETTINGS, 5);
-	backButton = new Bounce(BUT_BACK, 5);
-	upButton = new Bounce(BUT_UP, 5);
-	rightButton = new Bounce(BUT_RIGHT, 5);
-
-	Serial.begin(9600);
+Buttons::Buttons(int pSettings, int pBack, int pUp, int pRight) {
+	m_butSettings = new Button(pSettings);
+	m_butBack = new Button(pBack);
+	m_butUp = new Button(pUp);
+	m_butRight = new Button(pRight);
 }
 
-void Buttons::update() {
-	settingsButton->update();
-	backButton->update();
-	upButton->update();
-	rightButton->update();
-
-	boolean settingsPressed = false;
-	boolean backPressed = false;
-	boolean upPressed = false;
-	boolean rightPressed = false;
-	boolean changeState = false;
-
-	int settingsButtonState = settingsButton->read();
-	int backButtonState = backButton->read();
-	int upButtonState = upButton->read();
-	int rightButtonState = rightButton->read();
-
-	if (settingsButtonState == LOW) {
-		settingsButtonOld = LOW;
-	}
-
-	if (backButtonState == LOW) {
-		backButtonOld = LOW;
-	}
-
-	if (upButtonState == LOW) {
-		upButtonOld = LOW;
-	}
-
-	if (rightButtonState == LOW) {
-		rightButtonOld = LOW;
-	}
-
-	if (settingsButtonState == HIGH && settingsButtonOld == LOW) {
-		settingsButtonOld = HIGH;
-		settingsPressed = true;
-		changeState = true;
-	}
-
-	if (backButtonState == HIGH && backButtonOld == LOW) {
-		backButtonOld = HIGH;
-		backPressed = true;
-		changeState = true;
-	}
-
-	if (upButtonState == HIGH && upButtonOld == LOW) {
-		upButtonOld = HIGH;
-		upPressed = true;
-		changeState = true;
-	}
-
-	if (rightButtonState == HIGH && rightButtonOld == LOW) {
-		rightButtonOld = HIGH;
-		rightPressed = true;
-		changeState = true;
-	}
-
-	if (changeState == true) {
-		findNextState(settingsPressed, backPressed, upPressed, rightPressed);
-	}
+bool Buttons::settingsPressed() {
+	return m_butSettings->pressed();
 }
 
-void Buttons::findNextState(boolean pSettingsButton, boolean pBackButton,
-		boolean pUpButton, boolean pRightButton) {
-	switch (*state) {
-	case IDLE:
-		if (pSettingsButton == true) {
-			Serial.println("IDLE -> MENU");
-			*state = HOUR_SETTING;
-		}
-		break;
-	case HOUR_SETTING:
-		if (pBackButton == true) {
-			Serial.println("MENU -> IDLE");
-			*state = IDLE;
-		}
-		if (pSettingsButton == true) {
-			rtc->setDS3231time();
-			*state = IDLE;
-		}
-		if (pUpButton == true) {
-			if (rtc->getHour() < 23) {
-				rtc->setHour(rtc->getHour() + 1);
-			} else {
-				rtc->setHour(0);
-			}
-
-		}
-		if (pRightButton == true) {
-			*state = MINUTE_SETTING;
-		}
-		break;
-	case MINUTE_SETTING:
-		if (pBackButton == true) {
-			*state = IDLE;
-		}
-		if (pSettingsButton == true) {
-			rtc->setDS3231time();
-			*state = IDLE;
-		}
-		if (pUpButton == true) {
-			if (rtc->getMinute() < 59) {
-				rtc->setMinute(rtc->getMinute() + 1);
-			} else {
-				rtc->setMinute(0);
-			}
-		}
-		if (pRightButton == true) {
-			*state = SECOND_SETTING;
-		}
-		break;
-
-	case SECOND_SETTING:
-		if (pBackButton == true) {
-			*state = IDLE;
-		}
-		if (pSettingsButton == true) {
-			rtc->setDS3231time();
-			*state = IDLE;
-		}
-		if (pUpButton == true) {
-			if (rtc->getSecond() < 59) {
-				rtc->setSecond(rtc->getSecond() + 1);
-			} else {
-				rtc->setSecond(0);
-			}
-		}
-		if (pRightButton == true) {
-			*state = HOUR_SETTING;
-		}
-		break;
-	}
+bool Buttons::backPressed() {
+	return m_butBack->pressed();
 }
 
-Buttons::~Buttons() {
-	// TODO Auto-generated destructor stub
+bool Buttons::upPressed() {
+	return m_butUp->pressed();
 }
 
+bool Buttons::rightPressed() {
+	return m_butRight->pressed();
+}
