@@ -61,15 +61,15 @@ byte RTC::getHour() {
 }
 
 void RTC::setSecond(int pSecond) {
-	second = pSecond;
+	second = pSecond % 60;
 }
 
 void RTC::setMinute(int pMinute) {
-	minute = pMinute;
+	minute = pMinute % 60;
 }
 
 void RTC::setHour(int pHour) {
-	hour = pHour;
+	hour = pHour % 24;
 }
 
 byte RTC::bcdToDec(byte val)

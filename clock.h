@@ -17,7 +17,13 @@ extern "C" {
 void loop();
 void setup();
 void idleState();
-char* prepareTime();
+void hourState();
+void minuteState();
+void secondState();
+char* prepareSecondDisplay();
+char* prepareMinuteDisplay();
+char* prepareHourDisplay();
+char* prepareIdleDisplay();
 #ifdef __cplusplus
 } // extern "C"
 #endif
