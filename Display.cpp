@@ -6,64 +6,21 @@
  */
 
 #include "Display.h"
-#include "state.h"
 #include "display/LiquidCrystal.h"
-#include "RTC.h"
+#include "Settings.h"
 
-const int ROWS = 2;
-const int COLS = 16;
 
-Display::Display(State &pState, RTC &pRtc) {
-	state = &pState;
-	rtc = &pRtc;
+Display::Display() {
 	initLcd();
 }
 
 void Display::initLcd() {
-	lcd = new LiquidCrystal(8, 9, 10, 11, 12, 13);
-	lcd->begin(COLS, ROWS);
+	lcd = new LiquidCrystal(LCD_RS, LCD_E, LCD_DB4, LCD_DB5, LCD_DB6, LCD_DB7);
+	lcd->begin(DISPLAY_COLS, DISPLAY_ROWS);
 }
 
-void Display::update() {
+void Display::print(char pText[]) {
 	lcd->clear();
-	switch (*state) {
-	case IDLE:
-		printTime();
-		break;
-	case HOUR_SETTING:
-		lcd->print("Hour: ");
-		lcd->print(rtc->getHour());
-		break;
-	case MINUTE_SETTING:
-		lcd->print("Minute: ");
-		lcd->print(rtc->getMinute());
-		break;
-	case SECOND_SETTING:
-		lcd->print("Second: ");
-		lcd->print(rtc->getSecond());
-		break;
-
-	}
-}
-
-void Display::printTime() {
-	if (rtc->getHour() < 10) {
-		lcd->print("0");
-	}
-	lcd->print(rtc->getHour(), DEC);
-	lcd->print(":");
-	if (rtc->getMinute() < 10) {
-		lcd->print("0");
-	}
-	lcd->print(rtc->getMinute(), DEC);
-	lcd->print(":");
-	if (rtc->getSecond() < 10) {
-		lcd->print("0");
-	}
-	lcd->print(rtc->getSecond(), DEC);
-}
-
-Display::~Display() {
-	// TODO Auto-generated destructor stub
+	lcd->print(pText);
 }
 

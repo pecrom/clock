@@ -7,12 +7,7 @@
 
 #include "Buttons.h"
 #include "Arduino.h"
-#include "RTC.h"
 
-const int BUT_SETTINGS = 7;
-const int BUT_BACK = 6;
-const int BUT_UP = 4;
-const int BUT_RIGHT = 5;
 
 Buttons::Buttons(int pSettings, int pBack, int pUp, int pRight) {
 	m_butSettings = new Button(pSettings);

@@ -16,6 +16,8 @@ extern "C" {
 #endif
 void loop();
 void setup();
+void idleState();
+char* prepareTime();
 #ifdef __cplusplus
 } // extern "C"
 #endif

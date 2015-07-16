@@ -9,8 +9,7 @@
 
 #define DS3231_I2C_ADDRESS 0x68
 
-RTC::RTC(State &pState) {
-	state = &pState;
+RTC::RTC() {
 	Wire.begin();
 }
 
@@ -46,10 +45,7 @@ void RTC::setDS3231time()
 }
 
 void RTC::update() {
-	switch(*state) {
-	case IDLE:
-		readDS3231time();
-	}
+	readDS3231time();
 }
 
 byte RTC::getSecond() {

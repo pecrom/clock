@@ -8,10 +8,6 @@
 #ifndef BUTTONS_H_
 #define BUTTONS_H_
 
-
-#include "state.h"
-#include "Arduino.h"
-#include "RTC.h"
 #include "button/Button.h"
 
 class Buttons {

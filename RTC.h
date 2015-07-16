@@ -9,14 +9,13 @@
 #define RTC_H_
 
 #include "rtc/Wire.h"
-#include "state.h"
 #include "Arduino.h"
 
 
 
 class RTC {
 public:
-	RTC(State &pState);
+	RTC();
 	void update();
 	byte getSecond();
 	byte getMinute();
@@ -27,7 +26,6 @@ public:
 	void setDS3231time(void);
 
 private:
-	State *state;
 	byte second, minute, hour, dayOfWeek, dayOfMonth, month, year;
 	byte bcdToDec(byte);
 	byte decToBcd(byte);
